@@ -20,6 +20,7 @@ This tool helps you remove multiple domains from your Cloudflare account in a co
 - Rate-limit aware (backs off on HTTP 429)
 - Safe-by-default confirmation dialog
 - .env-based configuration to keep secrets out of source control
+- Standalone Windows executable with custom icon (no Python installation required)
 
 ## Requirements
 
@@ -78,16 +79,92 @@ Note: The app will prefer the API Token if present.
 
 ## Usage
 
-Run the app:
+### Option 1: Run from Python source
 
 ```bash
 python app.py
 ```
 
-1. Paste up to 10 domain names (one per line) in the input box.
-2. Click DELETE.
-3. Confirm the operation when prompted.
-4. Watch progress and logs. When done, inputs are re-enabled.
+### Option 2: Use standalone executable
+
+A pre-built Windows executable is available in the `dist/` folder:
+
+```bash
+CloudflareDomainDeleter.exe
+```
+
+The executable includes:
+- Custom orange cloud icon with delete symbol
+- No Python installation required
+- Same functionality as the Python script
+- Place `.env` file in the same directory as the .exe
+
+#### Instructions:
+1. Copy `CloudflareDomainDeleter.exe` from `dist/` to your desired location
+2. Copy `.env` file to the same directory
+3. Double-click the .exe to run
+4. Paste up to 10 domain names (one per line) in the input box
+5. Click DELETE
+6. Confirm the operation when prompted
+7. Watch progress and logs. When done, inputs are re-enabled
+
+## Building the Executable
+
+If you want to build your own standalone executable or customize the icon, follow these steps:
+
+### Prerequisites
+
+Install the required packages:
+
+```bash
+pip install pillow pyinstaller
+```
+
+### Step 1: Create Custom Icon (Optional)
+
+The project includes an `icon.py` script that generates a custom orange cloud icon with a delete symbol. To create your own icon:
+
+```bash
+python icon.py
+```
+
+This creates `cloudflare_deleter.ico` in the project root. You can also use any other `.ico` file.
+
+### Step 2: Build the Executable
+
+Use PyInstaller to create a standalone executable:
+
+```bash
+pyinstaller --onefile --windowed --icon=cloudflare_deleter.ico --name="CloudflareDomainDeleter" app.py
+```
+
+#### PyInstaller Options Explained:
+- `--onefile`: Creates a single executable file
+- `--windowed`: Runs without a console window (GUI app)
+- `--icon=cloudflare_deleter.ico`: Sets the custom icon
+- `--name="CloudflareDomainDeleter"`: Sets the output filename
+
+### Step 3: Locate the Executable
+
+After building, the executable will be in:
+```
+dist/CloudflareDomainDeleter.exe
+```
+
+### Step 4: Clean Up Build Files (Optional)
+
+You can remove the build artifacts after creating the executable:
+
+```bash
+rmdir /s /q build
+del *.spec
+```
+
+### Customization Options
+
+- **Different Icon**: Replace `cloudflare_deleter.ico` with your own `.ico` file
+- **Different Name**: Change the `--name` parameter in the PyInstaller command
+- **Include Console**: Remove `--windowed` if you want to see console output for debugging
 
 ## Safety Notes
 

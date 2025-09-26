@@ -27,3 +27,15 @@ Thumbs.db
 .env
 .env.*
 !.env.example
+
+# PyInstaller
+*.spec
+build/
+dist/
+
+# Executable
+*.exe
+
+# Icon generation
+icon.py
+cloudflare_deleter.ico
